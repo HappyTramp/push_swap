@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "common.h"
 
 t_stack *stack_new(int size)
 {

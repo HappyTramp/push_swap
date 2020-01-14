@@ -10,6 +10,10 @@ typedef struct
 	int top;
 }	t_stack;
 
+/*
+** stack.c
+*/
+
 t_stack *stack_new(int size);
 void stack_destroy(t_stack *stack);
 void stack_push(t_stack *stack, int n);
@@ -19,5 +23,21 @@ void stack_swap(t_stack *stack);
 void stack_push_to(t_stack *from, t_stack *to);
 void stack_rotate(t_stack *stack);
 void stack_reverse_rotate(t_stack *stack);
+
+/*
+** action.c
+*/
+
+void swap_a(t_stack *a);
+void swap_b(t_stack *b);
+void swap_both(t_stack *a, t_stack *b);
+void push_a(t_stack *a, t_stack *b);
+void push_b(t_stack *b, t_stack *a);
+void rotate_a(t_stack *a);
+void rotate_b(t_stack *b);
+void rotate_both(t_stack *a, t_stack *b);
+void reverse_rotate_a(t_stack *a);
+void reverse_rotate_b(t_stack *b);
+void reverse_rotate_both(t_stack *a, t_stack *b);
 
 #endif
