@@ -25,11 +25,14 @@ typedef enum
 	ACTION_RRA,
 	ACTION_RRB,
 	ACTION_RRR,
-	ACTION_ERROR
+	ACTION_ERROR,
+	ACTION_EOF
 }	t_action;
 
-t_status check(t_stack *a, t_stack *b);
-t_action read_action(void);
-t_action str_action(char *s);
+t_status	check(t_stack *a, t_stack *b);
+t_action	read_action(void);
+t_action	str_action(char *s);
+void		exec_action(t_action action, t_stack *a, t_stack *b);
+t_bool		stack_sorted(t_stack *stack);
 
 #endif

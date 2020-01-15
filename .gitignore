@@ -1,5 +1,7 @@
 a.out
 checker
 push_swap
+!src/checker
+!src/push_swap
 *.o
 *.ghc

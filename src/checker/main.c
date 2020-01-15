@@ -1,21 +1,27 @@
 #include "checker.h"
 
+// need to check duplicate
 int main(int argc, char **argv)
 {
 	t_status s;
 
 	if (argc == 1)
 		return (0);
-	if (!check_argv(argc, argv))
-	{
-		ft_putendl_fd("Error", STDERR_FILENO);
-		return (1);
-	}
 	t_stack *a = stack_new(argc - 1);
-	t_stack *b = stack_new(argc - 1);
 	while (--argc > 1)
+	{
+		errno = 0;
+		ft_strict_atoi(argv[argc]);
+		if (errno != 0)
+		{
+			stack_destroy(a);
+			ft_putendl_fd("Error", STDERR_FILENO);
+			return (1);
+		}
 		stack_push(a, ft_atoi(argv[argc]));
-	s = check(a, b))
+	}
+	t_stack *b = stack_new(argc - 1);
+	s = check(a, b);
 	if (s == STATUS_SUCCESS)
 		ft_putendl("OK");
 	else if (s == STATUS_FAILURE)

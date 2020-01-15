@@ -1,24 +1,46 @@
 RM = rm -f
 
-CC = gcc
-CCFLAGS = -Wall -Wextra #-Werror
+LIBFT_DIR = libft
 
+CC = gcc
+CCFLAGS = -I$(COMMON_DIR) -I$(LIBFT_DIR)/include -Wall -Wextra #-Werror
+LDFLAGS = -L$(LIBFT_DIR) -lft
+
+SRC_DIR = src
+
+COMMON_DIR = $(SRC_DIR)/common
 CHECKER_NAME = checker
-CHECKER_SRC = checker_src/main.c
-CHECKER_OBJ = $(CHECKER_SRC:.c=.o)
+
+COMMON_HEADER = $(COMMON_DIR)/common.h
+COMMON_FILES = stack.c action.c
+COMMON_SRC = $(addprefix $(COMMON_DIR)/,$(COMMON_FILES))
+COMMON_OBJ = $(COMMON_SRC:.c=.o)
 
 PUSH_SWAP_NAME = push_swap
-PUSH_SWAP_SRC = push_swap_src/main.c
+CHECKER_DIR = $(SRC_DIR)/checker
+PUSH_SWAP_DIR = $(SRC_DIR)/push_swap
+
+CHECKER_HEADER = $(CHECKER_DIR)/checker.h
+CHECKER_FILES = main.c check.c
+CHECKER_SRC = $(addprefix $(CHECKER_DIR)/,$(CHECKER_FILES))
+CHECKER_OBJ = $(CHECKER_SRC:.c=.o)
+CHECKER_OBJ += $(COMMON_OBJ)
+
+PUSH_SWAP_HEADER = $(PUSH_SWAP_DIR)/push_swap.h
+PUSH_SWAP_FILES = main.c
+PUSH_SWAP_SRC = $(addprefix $(PUSH_SWAP_DIR)/,$(PUSH_SWAP_FILES))
 PUSH_SWAP_OBJ = $(PUSH_SWAP_SRC:.c=.o)
+PUSH_SWAP_OBJ += $(COMMON_OBJ)
 
+all: libft_all $(CHECKER_NAME) $(PUSH_SWAP_NAME)
 
-all: $(CHECKER_NAME) $(PUSH_SWAP_NAME)
-
+$(CHECKER_NAME): CCFLAGS += -I$(CHECKER_DIR)
 $(CHECKER_NAME): $(CHECKER_OBJ) $(CHECKER_HEADER)
-	$(CC) -o $@ $(CHECKER_OBJ)
+	$(CC) $(LDFLAGS) -o $@ $(CHECKER_OBJ)
 
+$(PUSH_SWAP_NAME): CCFLAGS += -I$(PUSH_SWAP_DIR)
 $(PUSH_SWAP_NAME): $(PUSH_SWAP_OBJ) $(PUSH_SWAP_HEADER)
-	$(CC) -o $@ $(PUSH_SWAP_OBJ)
+	$(CC) $(LDFLAGS) -o $@ $(PUSH_SWAP_OBJ)
 
 %.o: %.c
 	$(CC) $(CCFLAGS) -c -o $@ $<
@@ -26,9 +48,16 @@ $(PUSH_SWAP_NAME): $(PUSH_SWAP_OBJ) $(PUSH_SWAP_HEADER)
 clean:
 	$(RM) $(CHECKER_OBJ)
 	$(RM) $(PUSH_SWAP_OBJ)
+	make -C $(LIBFT_DIR) fclean
 
-fclean: clean
-	$(RM) $(CHECKER_NAME)
-	$(RM) $(PUSH_SWAP_NAME)
+fclean:
+	$(RM) $(CHECKER_OBJ) $(CHECKER_NAME)
+	$(RM) $(PUSH_SWAP_OBJ) $(PUSH_SWAP_NAME)
+	make -C $(LIBFT_DIR) fclean
 
-re: fclean all
+re:
+	make fclean
+	make all
+
+libft_all:
+	make -C $(LIBFT_DIR)
