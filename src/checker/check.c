@@ -1,109 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/18 10:16:08 by cacharle          #+#    #+#             */
+/*   Updated: 2020/01/18 10:52:42 by cacharle         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "checker.h"
 
-t_status check(t_stack *a, t_stack *b)
-{
-	t_action	action;
-	t_list		*tmp;
-	t_list		*action_stack;
+#define ACTION_ID_BUF_SIZE 4
 
-	action_stack = NULL;
-	while ((action = read_action()) != ACTION_EOF)
-	{
-		if (action == ACTION_ERROR || (tmp = ft_lstnew((void*)action)) == NULL)
-		{
-			ft_lstclear(&action_stack, NULL);
-			return (STATUS_FAILURE);
-		}
-		ft_lstadd_front(&action_stack, tmp);
-	}
-	action_stack = ft_lstreverse_ret(action_stack);
-	while (action_stack != NULL)
-	{
-		exec_action((t_action)action_stack->content, a, b);
-		ft_lstpop_front(&action_stack, NULL);
-	}
+t_status	check(t_stack *a, t_stack *b)
+{
+	t_status	read_status;
+
+	while ((read_status = read_action(a, b)) != STATUS_EOF)
+		if (read_status == STATUS_ERROR)
+			return (STATUS_ERROR);
 	return (stack_sorted(a) && stack_empty(b) ?
 			STATUS_SUCCESS : STATUS_FAILURE);
 }
 
-t_action read_action(void)
+t_status	read_action(t_stack *a, t_stack *b)
 {
 	int		i;
 	int		ret;
 	char	c;
-	char	buf[4];
+	char	buf[ACTION_ID_BUF_SIZE];
 
 	ft_bzero(buf, sizeof(char) * 4);
 	i = 0;
 	while ((ret = read(STDIN_FILENO, &c, 1)) > 0)
 	{
 		if (c == '\n')
-			return (str_action(buf));
-		if (i >= 3)
-			return (ACTION_ERROR);
+			return (exec_action(buf, a, b));
+		if (i >= ACTION_ID_BUF_SIZE - 1)
+			return (STATUS_ERROR);
 		buf[i++] = c;
 		buf[i] = '\0';
 	}
-	return (ret == 0 ? ACTION_EOF : ACTION_ERROR);
+	return (ret == 0 ? STATUS_EOF : STATUS_ERROR);
 }
 
-t_action str_action(char *s)
-{
-	if (ft_strcmp(s, "sa") != 0)
-		return (ACTION_SA);
-	if (ft_strcmp(s, "sb") != 0)
-		return (ACTION_SB);
-	if (ft_strcmp(s, "ss") != 0)
-		return (ACTION_SS);
-	if (ft_strcmp(s, "pa") != 0)
-		return (ACTION_PA);
-	if (ft_strcmp(s, "pa") != 0)
-		return (ACTION_PB);
-	if (ft_strcmp(s, "ra") != 0)
-		return (ACTION_RA);
-	if (ft_strcmp(s, "rb") != 0)
-		return (ACTION_RB);
-	if (ft_strcmp(s, "rr") != 0)
-		return (ACTION_RR);
-	if (ft_strcmp(s, "rra") != 0)
-		return (ACTION_RRA);
-	if (ft_strcmp(s, "rrb") != 0)
-		return (ACTION_RRB);
-	if (ft_strcmp(s, "rrr") != 0)
-		return (ACTION_RRR);
-	return (ACTION_ERROR);
-}
+t_action g_actions[] = {
+	{"sa", FLAG_ARG_A, {.arg_1 = &swap_a}},
+	{"sb", FLAG_ARG_B, {.arg_1 = &swap_b}},
+	{"ss", FLAG_ARG_A_B, {.arg_2 = &swap_both}},
+	{"pa", FLAG_ARG_A_B, {.arg_2 = push_a}},
+	{"pb", FLAG_ARG_B_A, {.arg_2 = push_a}},
+	{"ra", FLAG_ARG_A, {.arg_1 = rotate_a}},
+	{"rb", FLAG_ARG_B, {.arg_1 = rotate_b}},
+	{"rr", FLAG_ARG_A_B, {.arg_2 = rotate_both}},
+	{"rra", FLAG_ARG_A,  {.arg_1 = reverse_rotate_a}},
+	{"rrb", FLAG_ARG_B, {.arg_1 = reverse_rotate_b}},
+	{"rrr", FLAG_ARG_A_B, {.arg_2 = reverse_rotate_both}},
+};
 
-void exec_action(t_action action, t_stack *a, t_stack *b)
+#define ACTIONS_SIZE (sizeof(g_actions) / sizeof(t_action))
+
+t_status exec_action(char action_id[ACTION_ID_BUF_SIZE], t_stack *a, t_stack *b)
 {
-	if (action == ACTION_SA)
-		swap_a(a);
-	else if (action == ACTION_SB)
-		swap_b(b);
-	else if (action == ACTION_SS)
-		swap_both(a, b);
-	else if (action == ACTION_PA)
-		push_a(a, b);
-	else if (action == ACTION_PB)
-		push_b(b, a);
-	else if (action == ACTION_RA)
-		rotate_a(a);
-	else if (action == ACTION_RB)
-		rotate_b(b);
-	else if (action == ACTION_RR)
-		rotate_both(a, b);
-	else if (action == ACTION_RRA)
-		reverse_rotate_a(a);
-	else if (action == ACTION_RRB)
-		reverse_rotate_b(b);
-	else if (action == ACTION_RRR)
-		reverse_rotate_both(a, b);
+	int	i;
+	
+	i = -1;
+	while (ft_strcmp(action_id, g_actions[i].id) != 0)
+		i++;
+	if (i == ACTIONS_SIZE)
+		return (STATUS_ERROR);
+	if (g_actions[i].args & FLAG_ARG_A)
+		g_actions[i].func.arg_1(a);
+	else if (g_actions[i].args & FLAG_ARG_B)
+		g_actions[i].func.arg_1(b);
+	else if (g_actions[i].args & FLAG_ARG_A_B)
+		g_actions[i].func.arg_2(a, b);
+	return (STATUS_SUCCESS);
 }
 
 t_bool	stack_sorted(t_stack *stack)
 {
 	int i;
 
+	if (stack_length(stack) < 2)
+		return (TRUE);
 	i = -1;
 	while (++i < stack->top - 1)
 		if (stack->elements[i] > stack->elements[i + 1])
