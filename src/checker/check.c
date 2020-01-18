@@ -6,13 +6,11 @@
 /*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 10:16:08 by cacharle          #+#    #+#             */
-/*   Updated: 2020/01/18 10:52:42 by cacharle         ###   ########.fr       */
+/*   Updated: 2020/01/18 12:04:41 by cacharle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
-
-#define ACTION_ID_BUF_SIZE 4
 
 t_status	check(t_stack *a, t_stack *b)
 {
@@ -46,27 +44,29 @@ t_status	read_action(t_stack *a, t_stack *b)
 	return (ret == 0 ? STATUS_EOF : STATUS_ERROR);
 }
 
-t_action g_actions[] = {
+static t_action	g_actions[] = {
 	{"sa", FLAG_ARG_A, {.arg_1 = &swap_a}},
 	{"sb", FLAG_ARG_B, {.arg_1 = &swap_b}},
 	{"ss", FLAG_ARG_A_B, {.arg_2 = &swap_both}},
-	{"pa", FLAG_ARG_A_B, {.arg_2 = push_a}},
-	{"pb", FLAG_ARG_B_A, {.arg_2 = push_a}},
-	{"ra", FLAG_ARG_A, {.arg_1 = rotate_a}},
-	{"rb", FLAG_ARG_B, {.arg_1 = rotate_b}},
-	{"rr", FLAG_ARG_A_B, {.arg_2 = rotate_both}},
-	{"rra", FLAG_ARG_A,  {.arg_1 = reverse_rotate_a}},
-	{"rrb", FLAG_ARG_B, {.arg_1 = reverse_rotate_b}},
-	{"rrr", FLAG_ARG_A_B, {.arg_2 = reverse_rotate_both}},
+	{"pa", FLAG_ARG_A_B, {.arg_2 = &push_a}},
+	{"pb", FLAG_ARG_B_A, {.arg_2 = &push_a}},
+	{"ra", FLAG_ARG_A, {.arg_1 = &rotate_a}},
+	{"rb", FLAG_ARG_B, {.arg_1 = &rotate_b}},
+	{"rr", FLAG_ARG_A_B, {.arg_2 = &rotate_both}},
+	{"rra", FLAG_ARG_A, {.arg_1 = &reverse_rotate_a}},
+	{"rrb", FLAG_ARG_B, {.arg_1 = &reverse_rotate_b}},
+	{"rrr", FLAG_ARG_A_B, {.arg_2 = &reverse_rotate_both}},
 };
 
 #define ACTIONS_SIZE (sizeof(g_actions) / sizeof(t_action))
 
-t_status exec_action(char action_id[ACTION_ID_BUF_SIZE], t_stack *a, t_stack *b)
+t_status	exec_action(char action_id[ACTION_ID_BUF_SIZE],
+						t_stack *a, t_stack *b)
 {
 	int	i;
-	
-	i = -1;
+
+	printf("action id %s\n", action_id);
+	i = 0;
 	while (ft_strcmp(action_id, g_actions[i].id) != 0)
 		i++;
 	if (i == ACTIONS_SIZE)
@@ -80,7 +80,7 @@ t_status exec_action(char action_id[ACTION_ID_BUF_SIZE], t_stack *a, t_stack *b)
 	return (STATUS_SUCCESS);
 }
 
-t_bool	stack_sorted(t_stack *stack)
+t_bool		stack_sorted(t_stack *stack)
 {
 	int i;
 

@@ -26,6 +26,7 @@ void stack_destroy(t_stack *stack)
 void stack_push(t_stack *stack, int n)
 {
 	stack->top++;
+	printf("%d\n", stack->top);
 	stack->elements[stack->top] = n;
 }
 

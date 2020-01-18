@@ -5,3 +5,4 @@ push_swap
 !src/push_swap
 *.o
 *.ghc
+*.dSYM
