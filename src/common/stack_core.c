@@ -6,7 +6,7 @@
 /*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 06:37:45 by cacharle          #+#    #+#             */
-/*   Updated: 2020/01/19 06:50:50 by cacharle         ###   ########.fr       */
+/*   Updated: 2020/01/19 13:33:08 by cacharle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_stack *stack_new(int size)
 		return (NULL);
 	}
 	stack->top = -1;
+	stack->tag = STACK_NO_TAG;
 	return (stack);
 }
 

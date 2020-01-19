@@ -6,7 +6,7 @@
 /*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 10:16:12 by cacharle          #+#    #+#             */
-/*   Updated: 2020/01/19 06:30:04 by cacharle         ###   ########.fr       */
+/*   Updated: 2020/01/19 09:09:29 by cacharle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -19,14 +19,6 @@
 # include "libft.h"
 
 # define ACTION_ID_BUF_SIZE 4
-
-typedef enum
-{
-	STATUS_SUCCESS,
-	STATUS_FAILURE,
-	STATUS_ERROR,
-	STATUS_EOF,
-}	t_status;
 
 typedef enum
 {

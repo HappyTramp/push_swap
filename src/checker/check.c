@@ -6,7 +6,7 @@
 /*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 10:16:08 by cacharle          #+#    #+#             */
-/*   Updated: 2020/01/19 07:11:05 by cacharle         ###   ########.fr       */
+/*   Updated: 2020/01/19 09:02:08 by cacharle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static t_action	g_actions[] = {
 	{"sa", FLAG_ARG_A, {.arg_1 = &stack_swap}},
 	{"sb", FLAG_ARG_B, {.arg_1 = &stack_swap}},
 	{"ss", FLAG_ARG_A_B, {.arg_2 = &stack_swap_2}},
-	{"pa", FLAG_ARG_A_B, {.arg_2 = &stack_push_to}},
-	{"pb", FLAG_ARG_B_A, {.arg_2 = &stack_push_to}},
+	{"pa", FLAG_ARG_B_A, {.arg_2 = &stack_push_to}},
+	{"pb", FLAG_ARG_A_B, {.arg_2 = &stack_push_to}},
 	{"ra", FLAG_ARG_A, {.arg_1 = &stack_rotate}},
 	{"rb", FLAG_ARG_B, {.arg_1 = &stack_rotate}},
 	{"rr", FLAG_ARG_A_B, {.arg_2 = &stack_rotate_2}},
@@ -89,9 +89,9 @@ t_bool		stack_sorted(t_stack *stack)
 
 	if (stack_length(stack) < 2)
 		return (TRUE);
-	i = -1;
-	while (++i < stack->top)
-		if (stack->elements[i] > stack->elements[i + 1])
+	i = stack->top + 1;
+	while (--i > 0)
+		if (stack->elements[i] > stack->elements[i - 1])
 			return (FALSE);
 	return (TRUE);
 }

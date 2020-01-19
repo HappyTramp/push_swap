@@ -12,7 +12,7 @@ COMMON_DIR = $(SRC_DIR)/common
 CHECKER_NAME = checker
 
 COMMON_HEADER = $(COMMON_DIR)/common.h
-COMMON_FILES = stack_core.c stack_op.c stack_helper.c
+COMMON_FILES = stack_core.c stack_op.c stack_helper.c parse.c
 COMMON_SRC = $(addprefix $(COMMON_DIR)/,$(COMMON_FILES))
 COMMON_OBJ = $(COMMON_SRC:.c=.o)
 
@@ -27,7 +27,7 @@ CHECKER_OBJ = $(CHECKER_SRC:.c=.o)
 CHECKER_OBJ += $(COMMON_OBJ)
 
 PUSH_SWAP_HEADER = $(PUSH_SWAP_DIR)/push_swap.h
-PUSH_SWAP_FILES = main.c
+PUSH_SWAP_FILES = main.c sort.c stack_wrapper.c
 PUSH_SWAP_SRC = $(addprefix $(PUSH_SWAP_DIR)/,$(PUSH_SWAP_FILES))
 PUSH_SWAP_OBJ = $(PUSH_SWAP_SRC:.c=.o)
 PUSH_SWAP_OBJ += $(COMMON_OBJ)
