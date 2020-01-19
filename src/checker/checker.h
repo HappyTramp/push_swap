@@ -6,7 +6,7 @@
 /*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 10:16:12 by cacharle          #+#    #+#             */
-/*   Updated: 2020/01/18 12:01:00 by cacharle         ###   ########.fr       */
+/*   Updated: 2020/01/19 06:30:04 by cacharle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -18,10 +18,7 @@
 # include "common.h"
 # include "libft.h"
 
-# define FLAG_ARG_A    (1 << 0)
-# define FLAG_ARG_B    (1 << 1)
-# define FLAG_ARG_A_B  (1 << 2)
-# define FLAG_ARG_B_A  (1 << 3)
+# define ACTION_ID_BUF_SIZE 4
 
 typedef enum
 {
@@ -31,9 +28,13 @@ typedef enum
 	STATUS_EOF,
 }	t_status;
 
-# define ACTION_ID_BUF_SIZE 4
-
-typedef char	t_flag_arg;
+typedef enum
+{
+	FLAG_ARG_A,
+	FLAG_ARG_B,
+	FLAG_ARG_A_B,
+	FLAG_ARG_B_A
+}	t_flag_arg;
 
 typedef struct
 {

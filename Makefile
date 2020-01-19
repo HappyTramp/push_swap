@@ -12,7 +12,7 @@ COMMON_DIR = $(SRC_DIR)/common
 CHECKER_NAME = checker
 
 COMMON_HEADER = $(COMMON_DIR)/common.h
-COMMON_FILES = stack.c action.c
+COMMON_FILES = stack_core.c stack_op.c stack_helper.c
 COMMON_SRC = $(addprefix $(COMMON_DIR)/,$(COMMON_FILES))
 COMMON_OBJ = $(COMMON_SRC:.c=.o)
 
