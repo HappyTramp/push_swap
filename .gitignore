@@ -6,3 +6,4 @@ push_swap
 *.o
 *.ghc
 *.dSYM
+benchmark.json
