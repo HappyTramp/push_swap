@@ -88,13 +88,6 @@ static void	push_swap_qsort_rec(t_stack *main, t_stack *tmp, int main_frame, int
 {
 	if (frame_length(main, main_frame) < 2)
 		return ;
-	if (frame_length(main, main_frame) == 2)
-	{
-		if (main->tag == STACK_A ? stack_peek(main) > main->elements[stack_length(main) - 1] :
-								stack_peek(main) < main->elements[stack_length(main) - 1])
-			stack_swap(main);
-		return ;
-	}
 
 	push_swap_qsort_partition(main, tmp, main_frame);
 
