@@ -57,7 +57,7 @@ static void	push_swap_qsort_partition(t_stack *main, t_stack *tmp, int main_fram
 	frame_len = frame_length(main, main_frame) - 1;
 	while (frame_len > 0)
 	{
-		if (stack_peek(main) < pivot)
+		if (main->tag == STACK_A ? (stack_peek(main) < pivot) : (stack_peek(main) > pivot))
 			stack_push_to_print(main, tmp);
 		else
 		{
@@ -90,20 +90,22 @@ static void	push_swap_qsort_rec(t_stack *main, t_stack *tmp, int main_frame, int
 		return ;
 	if (frame_length(main, main_frame) == 2)
 	{
-		if (stack_peek(main) > main->elements[stack_length(main) - 1])
+		if (main->tag == STACK_A ? stack_peek(main) > main->elements[stack_length(main) - 1] :
+								stack_peek(main) < main->elements[stack_length(main) - 1])
 			stack_swap(main);
 		return ;
 	}
 
 	push_swap_qsort_partition(main, tmp, main_frame);
+
 	push_swap_qsort_rec(tmp, main, tmp_frame, stack_length(main));
 	stack_push_to_print(main, tmp);
 	push_swap_qsort_rec(main, tmp, main_frame, stack_length(tmp));
+	stack_push_to_print(tmp, main);
 
 	int tmp_frame_len = frame_length(tmp, tmp_frame);
 	while (tmp_frame_len != 0)
 	{
-		/* stack_reverse_rotate_print(tmp); */
 		stack_push_to_print(tmp, main);
 		tmp_frame_len--;
 	}
