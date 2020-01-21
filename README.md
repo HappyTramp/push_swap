@@ -36,6 +36,18 @@ export ARG=$(echo ./random_stack.rb 1 20)
 ./push_swap $(echo $ARG) | ./visualizer.rb $(echo $ARG)
 ```
 
+# Test
+
+```
+./test.sh 20 1 100
+```
+
+Test argument stack parsing
+
+```
+./test.sh --error
+```
+
 # Benchmark
 
 Make sure to have Python3.6 >=
