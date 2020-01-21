@@ -51,40 +51,45 @@ def red(s)
 	"\033[31m#{s}\033[0m"
 end
 
-def print_stacks(a, b)
+def print_stacks(a, b, max_elem)
 	puts "       A             B\n"
-	puts "------------------------------"
+	puts "-" * (2 * max_elem + 10)
 
-	a_str = ARGV.length.times.map { |i| ARGV.length - i }.map do |i|
+	a_str = (1 + ARGV.length).times.map { |i| ARGV.length - i }.map do |i|
 		unless a.elements[i].nil?
-			"| " + a.elements[i].to_s.ljust(2) + " " + green(("+" * a.elements[i]).ljust(10)) + "| "
+			"| " + a.elements[i].to_s.ljust(2) + " " + green(("+" * a.elements[i]).ljust(max_elem)) + "| "
 		else
-			"|    #{green(' ' * 10)}| "
+			"|    #{green(' ' * max_elem)}| "
 		end
 	end
-	b_str = ARGV.length.times.map { |i| ARGV.length - i }.map do |i|
+	b_str = (1 + ARGV.length).times.map { |i| ARGV.length - i }.map do |i|
 		unless b.elements[i].nil?
-			b.elements[i].to_s.ljust(2) + " " + red(("+" * b.elements[i]).ljust(10)) + "|"
+			b.elements[i].to_s.ljust(2) + " " + red(("+" * b.elements[i]).ljust(max_elem)) + "|"
 		else
-			"   #{red(' ' * 10)}|"
+			"   #{red(' ' * max_elem)}|"
 		end
 	end
 
 	puts a_str.zip(b_str).map { |ab| ab[0] + ab[1] }.join("\n")
-	puts "------------------------------"
+	puts "-" * (2 * max_elem + 10)
 	puts
 end
 
 
-a = Stack.new(ARGV.map(&:to_i))
+a = Stack.new(ARGV.map(&:to_i).reverse)
 b = Stack.new([])
+
+max_elem = a.elements.max
+
+puts a.elements.length
 
 # lines = $stdin.read.split("\n")
 
+
+print_stacks(a, b, max_elem)
+
 $stdin.each_line do |op|
-	print_stacks(a, b)
 	op.strip!
-	puts "> #{op}"
 	case op
 	when "sa" then a.swap
 	when "sb" then b.swap
@@ -108,9 +113,8 @@ $stdin.each_line do |op|
 		a.rotate_rev
 		b.rotate_rev
 	else
-		puts "Error: wrong op"
-		exit
+		puts "Debug:"
 	end
+	puts "> #{op}"
+	print_stacks(a, b, max_elem)
 end
-
-print_stacks(a, b)
