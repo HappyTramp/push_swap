@@ -15,8 +15,11 @@ MIN_LONG=-9223372036854775808
 MAX_LONG1=9223372036854775808
 MIN_LONG1=-9223372036854775809
 
+test_status=0
+
 red() {
 	echo -n "\033[31m$1\033[0m "
+	test_status=1
 }
 
 green() {
@@ -103,7 +106,7 @@ if [ $1 = "--error" ]; then
 	assert_error `./push_swap $MIN_LONG1 2>&1`
 	assert_error `./push_swap $MAX_LONG1 2>&1`
 
-	exit
+	exit $test_status
 fi
 
 test_nb=$1
@@ -121,24 +124,26 @@ else
 fi
 
 for i in `seq 1 $test_nb`; do
-	arg=`random_stack.rb $start $end`
-	result=`push_swap $arg | ./checker $arg`
+	arg=`./random_stack.rb $start $end`
+	result=`./push_swap $arg | ./checker $arg`
 
 	case $result in
-		OK)
-			echo -n "\033[32m.\033[0m"
+		"OK")
+			green "\033[32m.\033[0m"
 			;;
-		KO)
-			echo -n "\033[31m!\033[0m"
+		"KO")
+			red  "\033[31m!\033[0m"
 			echo "Test $i failed with: $arg" >> result.log
 			;;
-		Error)
-			echo -n "\033[31m!\033[0m"
+		"Error")
+			red "\033[31m!\033[0m"
 			echo "Test $i failed due to parsing error with: $arg" >> result.log
 			;;
 		*)
-			echo "Unexpected output"
+			red "Unexpected output"
 			exit
 			;;
 	esac
 done
+
+exit $test_status
