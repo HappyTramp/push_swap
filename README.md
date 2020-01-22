@@ -52,12 +52,16 @@ Test argument stack parsing
 
 Make sure to have Python3.6 >=
 
+![benchmark\_image](./bench.png)
+
 ```
 python benchmark.py 10 100 5 10
 python benchmark_plot.py
 ```
 
 Plot operation distribution
+
+![benchmark\_dist\_image](./bench_dist.png)
 
 ```
 python benchmark_plot.py --dist

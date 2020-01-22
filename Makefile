@@ -3,7 +3,7 @@ RM = rm -f
 LIBFT_DIR = libft
 
 CC = gcc
-CCFLAGS = -I$(COMMON_DIR) -I$(LIBFT_DIR)/include -Wall -Wextra -g#-Werror
+CCFLAGS = -I$(COMMON_DIR) -I$(LIBFT_DIR)/include -Wall -Wextra -Werror
 LDFLAGS = -L$(LIBFT_DIR) -lft
 
 SRC_DIR = src

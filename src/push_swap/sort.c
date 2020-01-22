@@ -6,24 +6,15 @@
 /*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 09:12:02 by cacharle          #+#    #+#             */
-/*   Updated: 2020/01/22 08:55:55 by cacharle         ###   ########.fr       */
+/*   Updated: 2020/01/22 11:08:00 by cacharle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	stack_print(t_stack *stack)
+static int	frame_length(t_stack *st, int frame_index)
 {
-	printf("%s> ", stack->tag == STACK_A ? "A" : "B");
-	for (int i = 0; i <= stack->top; i++)
-		printf("%2d | ", stack->elements[i]);
-	printf("\n");
-}
-
-
-static int frame_length(t_stack *st, int frame_index)
-{
-	return stack_length(st) - frame_index;
+	return (stack_length(st) - frame_index);
 }
 
 /*
@@ -45,7 +36,8 @@ static int frame_length(t_stack *st, int frame_index)
 ** each of those will be sorted in the next recursion
 */
 
-static void	push_swap_qsort_partition(t_stack *main, t_stack *tmp, int main_frame)
+static void	push_swap_qsort_partition(t_stack *main, t_stack *tmp,
+										int main_frame)
 {
 	int	pivot;
 	int hidden_count;
@@ -57,7 +49,8 @@ static void	push_swap_qsort_partition(t_stack *main, t_stack *tmp, int main_fram
 	frame_len = frame_length(main, main_frame) - 1;
 	while (frame_len > 0)
 	{
-		if (main->tag == STACK_A ? (stack_peek(main) < pivot) : (stack_peek(main) > pivot))
+		if (main->tag == STACK_A ?
+				(stack_peek(main) < pivot) : (stack_peek(main) > pivot))
 			stack_push_to_print(main, tmp);
 		else
 		{
@@ -66,6 +59,8 @@ static void	push_swap_qsort_partition(t_stack *main, t_stack *tmp, int main_fram
 		}
 		frame_len--;
 	}
+	if (stack_peek(main) == pivot)
+		return ;
 	while (hidden_count-- > 0)
 		stack_reverse_rotate_print(main);
 }
@@ -84,24 +79,29 @@ static void	push_swap_qsort_partition(t_stack *main, t_stack *tmp, int main_fram
 ** push all elements of tmp on main
 */
 
-static void	push_swap_qsort_rec(t_stack *main, t_stack *tmp, int main_frame, int tmp_frame)
+static void	push_swap_qsort_rec(t_stack *main, t_stack *tmp,
+								int main_frame, int tmp_frame)
 {
+	int	tmp_frame_len;
+
 	if (frame_length(main, main_frame) < 2)
 		return ;
-
+	if (frame_length(main, main_frame) == 2)
+	{
+		if (main->tag == STACK_A ?
+				main->elements[main->top] > main->elements[main->top - 1]
+				: main->elements[main->top] < main->elements[main->top - 1])
+			stack_swap_print(main);
+		return ;
+	}
 	push_swap_qsort_partition(main, tmp, main_frame);
-
 	push_swap_qsort_rec(tmp, main, tmp_frame, stack_length(main));
 	stack_push_to_print(main, tmp);
 	push_swap_qsort_rec(main, tmp, main_frame, stack_length(tmp));
 	stack_push_to_print(tmp, main);
-
-	int tmp_frame_len = frame_length(tmp, tmp_frame);
-	while (tmp_frame_len != 0)
-	{
+	tmp_frame_len = frame_length(tmp, tmp_frame);
+	while (tmp_frame_len-- > 0)
 		stack_push_to_print(tmp, main);
-		tmp_frame_len--;
-	}
 }
 
 /*

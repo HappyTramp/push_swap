@@ -1,4 +1,4 @@
 language: c
 compiler: gcc
 install: sudo apt install -y ruby
-script: make && sh ./test.sh --error && sh ./test.sh 100 10 1000
+script: make all && sh ./test.sh --error && sh ./test.sh 100 10 1000

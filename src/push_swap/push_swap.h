@@ -6,7 +6,7 @@
 /*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 09:10:11 by cacharle          #+#    #+#             */
-/*   Updated: 2020/01/22 08:59:59 by cacharle         ###   ########.fr       */
+/*   Updated: 2020/01/22 10:42:44 by cacharle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 ** sort.c
 */
 
-void	push_swap_sort(t_stack *main, t_stack *tmp);
+void	push_swap_qsort(t_stack *main, t_stack *tmp);
 
 /*
 ** stack_wrapper.c
