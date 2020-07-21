@@ -6,7 +6,7 @@
 /*   By: cacharle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 09:12:02 by cacharle          #+#    #+#             */
-/*   Updated: 2020/01/22 11:08:00 by cacharle         ###   ########.fr       */
+/*   Updated: 2020/07/21 11:43:00 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,36 @@ static int	frame_length(t_stack *st, int frame_index)
 {
 	return (stack_length(st) - frame_index);
 }
+
+/* static void	push_swap_sort3(t_stack *main, int main_frame) */
+/* { */
+/* 	#<{(| 1 < 2 < 3 |)}># */
+/* 	#<{(| 2 < 3 < 1 |)}># */
+/* 	#<{(| 3 < 1 < 2 |)}># */
+/* 	#<{(| 3 < 2 < 1 |)}># */
+/* 	#<{(| 2 < 1 < 3 |)}># */
+/* 	#<{(| 1 < 3 < 2 |)}># */
+/*  */
+/* 	int a, b, c; */
+/*  */
+/* 	a = main->elements[main->top]; */
+/* 	b = main->elements[main->top - 1]; */
+/* 	c = main->elements[main->top - 2]; */
+/*  */
+/* 	if (a < b && b < c) */
+/* 		return ; */
+/* 	if (a < b && b > c) */
+/* 		stack_swap_print(main); */
+/*  */
+/* 	if (a > b && b < c) */
+/* 		stack_swap_print(main); */
+/* 	if (a < b && b > c) */
+/* 		stack_swap_print(main); */
+/* 	if (a < b && b > c) */
+/* 		stack_swap_print(main); */
+/* 	if (a < b && b > c) */
+/* 		stack_swap_print(main); */
+/* } */
 
 /*
 ** main       : stack to sort
@@ -94,6 +124,8 @@ static void	push_swap_qsort_rec(t_stack *main, t_stack *tmp,
 			stack_swap_print(main);
 		return ;
 	}
+	/* if (frame_length(main main_frame) == 3) */
+	/* 	return push_swap_sort3(main, main_frame); */
 	push_swap_qsort_partition(main, tmp, main_frame);
 	push_swap_qsort_rec(tmp, main, tmp_frame, stack_length(main));
 	stack_push_to_print(main, tmp);
